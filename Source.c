@@ -33,9 +33,9 @@ int main(void) {
 	rewind(fp);
 	for ( i= 0; i < count; i++)
 	{
-		fscanf(fp, "%s %s %lf\n", (*(ps + i)).ime, (*(ps + i)).prezime, &((ps + i)->bodovi));
+		fscanf(fp, "%s %s %lf\n", (*(ps + i)).ime, (*(ps + i)).prezime, &(*(ps + i).bodovi));
 		relativni = ps[i].bodovi / maxbrbod*100;
-		printf("Ime: %s\t Prezime: %s\t Bodovi: %lf\t Relativni bodovi: %lf\n", (*(ps + i)).ime, (*(ps + i)).prezime, ((ps + i)->bodovi), relativni);
+		printf("Ime: %s\t Prezime: %s\t Bodovi: %lf\t Relativni bodovi: %lf\n", (*(ps + i)).ime, (*(ps + i)).prezime, &(*(ps + i).bodovi), relativni);
 	}
 	printf("Broj studenata u datoteci je %d", count);
 	fclose(fp);
