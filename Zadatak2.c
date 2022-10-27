@@ -8,7 +8,7 @@
 
 struct _Osoba;
 typedef struct _Osoba* poz;
-struct _Osoba {
+typedef struct _Osoba {
 	char ime[MAX_NAME];
 	char prezime[MAX_NAME];
 	int godRod;
