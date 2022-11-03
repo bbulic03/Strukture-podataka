@@ -50,6 +50,12 @@ int Add(pos p) {
 	fp = fopen(filename, "r");
 
 	/*fgets(buffer, MAX_LINE,fp);*/
-	sscanf("%n", buffer);
+	sscanf(p,"%d %d %n", &coef,&exp,&numofbytes);
+	fclose(fp);
+	return EXIT_SUCCESS;
+}
+
+int Multiply(pos p) {
+	
 	return EXIT_SUCCESS;
 }
