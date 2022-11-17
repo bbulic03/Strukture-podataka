@@ -1,5 +1,6 @@
 #define _CRT_SECURE_NO_WARNINGS
 
+#define ERROR -1
 #include<stdio.h>
 #include<stdlib.h>
 #include<malloc.h>
@@ -22,7 +23,7 @@ int main(void)
 {
     FILE* f;
     struct stog head = { .el = 0, .next = NULL };
-    int el = '+';
+    int el = 0;
     int br = 0;
     int status = 0;
     char buffer[1024];
@@ -33,8 +34,8 @@ int main(void)
     f = fopen("postfiks.txt", "r");
     if (f == NULL)
     {
-        perror("Greska pri dohvacanju datoteke!\n");
-        return -1;
+        printf("Greska pri dohvacanju datoteke!\n");
+        return ERROR;
     }
     fgets(buffer, 1024, f);
     trenutni = &buffer[0];
@@ -43,14 +44,13 @@ int main(void)
     {
         status = 0;
         status = sscanf(trenutni, "%d%n", &el, &brojBitova);
-        //printf("Status nakon skeniranja: %d\n", status);
         if (status == 1)
             push(el, &head);
         else
         {
             sscanf(trenutni, " %c%n", &operacija, &brojBitova);
             op(&head, operacija);
-            //printf("*%c*", operacija);
+           
         }
         trenutni += brojBitova;
         br += brojBitova;
@@ -59,7 +59,7 @@ int main(void)
 
 
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 int push(int x, poz p)
@@ -68,8 +68,8 @@ int push(int x, poz p)
     q = (poz)malloc(sizeof(struct stog));
     if (q == NULL)
     {
-        perror("Greska pri alokaciji!\n");
-        return -1;
+        printf("Greska pri alokaciji!\n");
+        return ERROR;
     }
     q->el = x;
     q->next = p->next;
@@ -84,7 +84,7 @@ int pop(poz p)
     if (p->next == NULL)
     {
         printf("Nema nicega u stogu!\n");
-        return -1;
+        return ERROR;
     }
     q = p->next;
     p->next = q->next;
@@ -99,7 +99,7 @@ int print(poz p)
     if (p == NULL)
     {
         printf("Stog je prazan!\n");
-        return 0;
+        return EXIT_SUCCESS;
     }
     printf("Vas stog: ");
     while (p != NULL)
@@ -108,7 +108,7 @@ int print(poz p)
         p = p->next;
     }
     printf("\n");
-    return 0;
+    return EXIT_SUCCESS;
 }
 
 int op(poz p, char operacija)
@@ -138,6 +138,5 @@ int op(poz p, char operacija)
         push(x * y, p);
         break;
     }
-    }
-    return 0;
+    return EXIT_SUCCESS;
 }
