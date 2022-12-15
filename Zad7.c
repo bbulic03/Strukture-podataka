@@ -4,29 +4,29 @@
 #define N 50
 
 struct dir;
-typedef struct dir* poz;
+typedef struct dir* pos;
 struct dir
 {
     char ime[N];
-    poz sibling;
-    poz child;
+    pos sibling;
+    pos child;
 };
 
 struct stog;
-typedef struct stog* stpoz;
+typedef struct stog* stpos;
 struct stog
 {
-    poz data;
-    stpoz next;
+    pos data;
+    stpos next;
 };
 
-poz dodajDir(poz current, poz p);
-void print(poz p);
-poz trazi(poz p, char* dirIme, char* trenutni, int n, stpoz red);
+pos dodajDir(pos current, pos p);
+void print(pos p);
+pos trazi(pos p, char* dirIme, char* trenutni, int n, stpos red);
 void brisi(poz p);
-stpoz push(stpoz red, poz p);
-poz pop(stpoz red);
-stpoz popStog(stpoz red);
+stpos push(stpos red, pos p);
+pos pop(stpos red);
+stpos popStog(stpos red);
 
 
 int main(void)
@@ -34,8 +34,8 @@ int main(void)
     struct dir C;
     struct stog head = {.data = &C, .next = NULL};
     char naredba[10], dirIme[N], trenutni[100];
-    poz q, current = &C;
-    stpoz currentStog = &head, h;
+    pos q, current = &C;
+    stpos currentStog = &head, h;
     int n = 0, i;
 
     strcpy(trenutni, "");
@@ -52,7 +52,7 @@ int main(void)
         if(strcmp(naredba, "md") == 0)
         {
             scanf("%s", dirIme);
-            q = (poz)malloc(sizeof(struct dir));
+            q = (pos)malloc(sizeof(struct dir));
             strcpy(q->ime, dirIme);
             q->sibling = NULL;
             q->child = NULL;
@@ -87,18 +87,18 @@ int main(void)
         else if(strcmp(naredba, "exit") == 0)
         {
             brisi(&C);
-            return 0;
+            return EXIT_SUCCESS;
         }
         else
         {
-            printf("Naredba nije pronadena!\n");
+            printf("Command not found!\n");
         }
     }
 
-    return 0;
+    return EXIT_SUCCESS;
 }
 
-poz dodajDir(poz current, poz p)
+pos dodajDir(pos current, pos p)
 {
     if(current == NULL)
         return p;
@@ -111,7 +111,7 @@ poz dodajDir(poz current, poz p)
         current->sibling = dodajDir(current->sibling, p);
     else
     {
-        printf("Vec postoji ta datoteka\n");
+        printf("That directory already exists\n");
         free(p);
     }
     return current;
@@ -120,7 +120,7 @@ poz dodajDir(poz current, poz p)
 void print(poz p)
 {
     if(p == NULL)
-        printf("Nema nijednog direktorija\n");
+        printf("There is no directory\n");
     while(p != NULL)
     {
         printf(" %s\n", p->ime);
@@ -128,10 +128,10 @@ void print(poz p)
     }
 }
 
-poz trazi(poz p, char* dirIme, char* trenutni, int n, stpoz red)
+pos trazi(pos p, char* dirIme, char* trenutni, int n, stpos red)
 {
     int i;
-    poz c = p;
+    pos c = p;
     p = p->child;
     while(p != NULL)
     {
@@ -148,13 +148,13 @@ poz trazi(poz p, char* dirIme, char* trenutni, int n, stpoz red)
     }
     if(p == NULL)
     {
-        printf("Nije pronaden direktorij\n");
+        printf("Directory not found\n");
         return c;
     }
     return c;
 }
 
-void brisi(poz p)
+void brisi(pos p)
 {
     if(!p)
         return;
@@ -163,24 +163,24 @@ void brisi(poz p)
     free(p);
 }
 
-stpoz push(stpoz red, poz p)
+stpos push(stpos red, pos p)
 {
-    stpoz q;
-    q = (stpoz)malloc(sizeof(struct stog));
+    stpos q;
+    q = (stpos)malloc(sizeof(struct stog));
     q->data = p;
     q->next = red;
     return q;
 }
 
-poz pop(stpoz red)
+pos pop(stpos red)
 {
-    poz q;
+    pos q;
     q = red->data;
     return q;
 }
 
-stpoz popStog(stpoz red)
+stpos popStog(stpos red)
 {
-    stpoz q = red->next;
+    stpos q = red->next;
     return q;
 }
