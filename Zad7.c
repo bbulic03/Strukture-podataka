@@ -66,8 +66,7 @@ int main(void)
             currentStack = push(currentStack, current);
         }
         else if(strcmp(command, "cd..") == 0)
-        {
-            //printf("*%s*", currentStack->data->name);
+            
             if(current != &C)
             {
                 currentStack = popStack(currentStack);
