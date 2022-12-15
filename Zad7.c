@@ -7,14 +7,14 @@ struct dir;
 typedef struct dir* pos;
 struct dir
 {
-    char ime[N];
+    char name[N];
     pos sibling;
     pos child;
 };
 
-struct stog;
-typedef struct stog* stpos;
-struct stog
+struct stack;
+typedef struct stack* stpos;
+struct stack
 {
     pos data;
     stpos next;
@@ -22,69 +22,69 @@ struct stog
 
 pos AddDir(pos current, pos p);
 void print(pos p);
-pos find(pos p, char* dirIme, char* trenutni, int n, stpos red);
+pos find(pos p, char* dirName, char* curr, int n, stpos queue);
 void delete(pos p);
-stpos push(stpos red, pos p);
-pos pop(stpos red);
-stpos popStog(stpos red);
+stpos push(stpos queue, pos p);
+pos pop(stpos queue);
+stpos popStack(stpos queue);
 
 
 int main(void)
 {
     struct dir C;
-    struct stog head = {.data = &C, .next = NULL};
-    char naredba[10], dirIme[N], trenutni[100];
+    struct stack head = {.data = &C, .next = NULL};
+    char command[10], dirName[N], curr[100];
     pos q, current = &C;
-    stpos currentStog = &head, h;
+    stpos currentStack = &head, h;
     int n = 0, i;
 
-    strcpy(trenutni, "");
+    strcpy(curr, "");
 
-    strcpy(C.ime, "C:");
+    strcpy(C.name, "C:");
     C.sibling = NULL;
     C.child = NULL;
 
 
     while(1)
     {
-        printf("%s%s", C.ime, trenutni);
-        scanf("%s", naredba);
-        if(strcmp(naredba, "md") == 0)
+        printf("%s%s", C.name, curr);
+        scanf("%s", command);
+        if(strcmp(command, "md") == 0)
         {
-            scanf("%s", dirIme);
+            scanf("%s", dirName);
             q = (pos)malloc(sizeof(struct dir));
-            strcpy(q->ime, dirIme);
+            strcpy(q->name, dirName);
             q->sibling = NULL;
             q->child = NULL;
             current->child = AddDir(current->child, q);
         }
-        else if(strcmp(naredba, "cd") == 0)
+        else if(strcmp(command, "cd") == 0)
         {
-            scanf("%s", dirIme);
-            n = strlen(trenutni);
-            current = find(current, dirIme, trenutni, n, currentStog);
-            currentStog = push(currentStog, current);
+            scanf("%s", dirName);
+            n = strlen(curr);
+            current = find(current, dirName, curr, n, currentStack);
+            currentStack = push(currentStack, current);
         }
-        else if(strcmp(naredba, "cd..") == 0)
+        else if(strcmp(command, "cd..") == 0)
         {
-            //printf("*%s*", currentStog->data->ime);
+            //printf("*%s*", currentStack->data->name);
             if(current != &C)
             {
-                currentStog = popStog(currentStog);
-                current = pop(currentStog);
+                currentStack = popStack(currentStack);
+                current = pop(currentStack);
             }
-            for(i = strlen(trenutni) - 2; i >= 0; i--)
+            for(i = strlen(curr) - 2; i >= 0; i--)
             {
-                if(trenutni[i] == ':')
+                if(curr[i] == ':')
                     break;
-                trenutni[i] = '\0';
+                curr[i] = '\0';
             }
         }
-        else if(strcmp(naredba, "dir") == 0)
+        else if(strcmp(command, "dir") == 0)
         {
             print(current->child);
         }
-        else if(strcmp(naredba, "exit") == 0)
+        else if(strcmp(command, "exit") == 0)
         {
             delete(&C);
             return EXIT_SUCCESS;
@@ -102,12 +102,12 @@ pos AddDir(pos current, pos p)
 {
     if(current == NULL)
         return p;
-    if(strcmp(current->ime, p->ime) > 0)
+    if(strcmp(current->name, p->name) > 0)
     {
         p->sibling = current;
         return p;
     }
-    else if(strcmp(current->ime, p->ime) < 0)
+    else if(strcmp(current->name, p->name) < 0)
         current->sibling = AddDir(current->sibling, p);
     else
     {
@@ -123,25 +123,25 @@ void print(pos p)
         printf("There is no directory\n");
     while(p != NULL)
     {
-        printf(" %s\n", p->ime);
+        printf(" %s\n", p->name);
         p = p->sibling;
     }
 }
 
-pos find(pos p, char* dirIme, char* trenutni, int n, stpos red)
+pos find(pos p, char* dirName, char* curr, int n, stpos queue)
 {
     int i;
     pos c = p;
     p = p->child;
     while(p != NULL)
     {
-        if(strcmp(p->ime, dirIme) == 0)
+        if(strcmp(p->name, dirName) == 0)
         {
-            for(i = 0; i < strlen(dirIme); i++)
-                trenutni[n + i] = dirIme[i];
-            trenutni[n + i] = ':';
-            trenutni[n + 1 + i] = '\0';
-            red = push(red, p);
+            for(i = 0; i < strlen(dirName); i++)
+                curr[n + i] = dirName[i];
+            curr[n + i] = ':';
+            curr[n + 1 + i] = '\0';
+            queue = push(queue, p);
             return p;
         }
         p = p->sibling;
@@ -163,24 +163,24 @@ void delete(pos p)
     free(p);
 }
 
-stpos push(stpos red, pos p)
+stpos push(stpos queue, pos p)
 {
     stpos q;
-    q = (stpos)malloc(sizeof(struct stog));
+    q = (stpos)malloc(sizeof(struct stack));
     q->data = p;
-    q->next = red;
+    q->next = queue;
     return q;
 }
 
-pos pop(stpos red)
+pos pop(stpos queue)
 {
     pos q;
-    q = red->data;
+    q = queue->data;
     return q;
 }
 
-stpos popStog(stpos red)
+stpos popStack(stpos queue)
 {
-    stpos q = red->next;
+    stpos q = queue->next;
     return q;
 }
