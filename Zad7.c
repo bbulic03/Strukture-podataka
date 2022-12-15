@@ -23,7 +23,7 @@ struct stog
 pos dodajDir(pos current, pos p);
 void print(pos p);
 pos trazi(pos p, char* dirIme, char* trenutni, int n, stpos red);
-void brisi(poz p);
+void brisi(pos p);
 stpos push(stpos red, pos p);
 pos pop(stpos red);
 stpos popStog(stpos red);
