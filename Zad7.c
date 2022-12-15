@@ -20,10 +20,10 @@ struct stog
     stpos next;
 };
 
-pos dodajDir(pos current, pos p);
+pos AddDir(pos current, pos p);
 void print(pos p);
-pos trazi(pos p, char* dirIme, char* trenutni, int n, stpos red);
-void brisi(pos p);
+pos find(pos p, char* dirIme, char* trenutni, int n, stpos red);
+void delete(pos p);
 stpos push(stpos red, pos p);
 pos pop(stpos red);
 stpos popStog(stpos red);
@@ -56,13 +56,14 @@ int main(void)
             strcpy(q->ime, dirIme);
             q->sibling = NULL;
             q->child = NULL;
-            current->child = dodajDir(current->child, q);
+            current->child = Add
+                Dir(current->child, q);
         }
         else if(strcmp(naredba, "cd") == 0)
         {
             scanf("%s", dirIme);
             n = strlen(trenutni);
-            current = trazi(current, dirIme, trenutni, n, currentStog);
+            current = find(current, dirIme, trenutni, n, currentStog);
             currentStog = push(currentStog, current);
         }
         else if(strcmp(naredba, "cd..") == 0)
@@ -86,7 +87,7 @@ int main(void)
         }
         else if(strcmp(naredba, "exit") == 0)
         {
-            brisi(&C);
+            delete(&C);
             return EXIT_SUCCESS;
         }
         else
@@ -98,7 +99,7 @@ int main(void)
     return EXIT_SUCCESS;
 }
 
-pos dodajDir(pos current, pos p)
+pos AddDir(pos current, pos p)
 {
     if(current == NULL)
         return p;
@@ -108,7 +109,7 @@ pos dodajDir(pos current, pos p)
         return p;
     }
     else if(strcmp(current->ime, p->ime) < 0)
-        current->sibling = dodajDir(current->sibling, p);
+        current->sibling = AddDir(current->sibling, p);
     else
     {
         printf("That directory already exists\n");
@@ -128,7 +129,7 @@ void print(pos p)
     }
 }
 
-pos trazi(pos p, char* dirIme, char* trenutni, int n, stpos red)
+pos find(pos p, char* dirIme, char* trenutni, int n, stpos red)
 {
     int i;
     pos c = p;
@@ -154,12 +155,12 @@ pos trazi(pos p, char* dirIme, char* trenutni, int n, stpos red)
     return c;
 }
 
-void brisi(pos p)
+void delete(pos p)
 {
     if(!p)
         return;
-    brisi(p->sibling);
-    brisi(p->child);
+    delete(p->sibling);
+    delete(p->child);
     free(p);
 }
 
