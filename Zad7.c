@@ -117,7 +117,7 @@ pos dodajDir(pos current, pos p)
     return current;
 }
 
-void print(poz p)
+void print(pos p)
 {
     if(p == NULL)
         printf("There is no directory\n");
