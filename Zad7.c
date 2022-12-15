@@ -56,8 +56,7 @@ int main(void)
             strcpy(q->ime, dirIme);
             q->sibling = NULL;
             q->child = NULL;
-            current->child = Add
-                Dir(current->child, q);
+            current->child = AddDir(current->child, q);
         }
         else if(strcmp(naredba, "cd") == 0)
         {
