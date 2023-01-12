@@ -26,18 +26,18 @@ Position insert(Position current, Position q);
 Position createElement(int number);
 int replace(Position current);
 int printList(Pos first);
-Pos createEl(int broj);
+Pos createElList(int broj);
 int insertAfter(Pos position, Pos newel);
-int insertIntoFile(Pos second, Pos first, char* imeDatoteke);
+int insertIntoFile(Pos second, Pos first, char* fileName);
 
 int main()
 {
 	Position roota = NULL;
-	Position rootc = NULL;
+	Position rootr = NULL;
 	Position q;
 	int niz1[10] = { 2, 5, 7, 8, 11, 1, 4, 2, 3, 7 };
 	time_t t;
-	int nepotrebni;
+	int OriginalEl;
 	list Head1 = { .number = 0 };
 	Pos p1 = &Head1;
 	list Head2 = { .number = 0 };
@@ -58,7 +58,7 @@ int main()
 	inorderList(roota, p1);
 	printList(p1->next);
 
-	nepotrebni = replace(roota);
+	OriginalEl = replace(roota);
 	printf("\nProvjera ispis stabla inorder: ");
 	inorder(roota);
 	printf("\nProvjera ispis liste: ");
@@ -71,15 +71,15 @@ int main()
 	{
 		niz1[i] = rand() % (89 + 1 - 11) + 11;
 		q = createElement(niz1[i]);
-		rootc = insert(rootc, q);
+		rootr = insert(rootr, q);
 	}
 
 	printf("\nProvjera ispis inorder: ");
-	inorder(rootc);
+	inorder(rootr);
 
 
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 Position createElement(int number)
 {
@@ -110,25 +110,25 @@ Position insert(Position current, Position q) {
 }
 int inorder(Position current) {
 	if (current == NULL)
-		return 0;
+		return EXIT_SUCCESS;
 	inorder(current->left);
 	printf("%d ", current->num);
 	inorder(current->right);
-	return 0;
+	return EXIT_SUCCESS;
 }
 int inorderList(Position current, Pos position) {
 	Pos newel = NULL;
 
 	if (current == NULL)
-		return 0;
+		return EXIT_SUCCESS;
 
 	inorderList(current->left, position);
 
-	newel = createEl(current->num);
+	newel = createElList(current->num);
 	insertAfter(position, newel);
 
 	inorderList(current->right, position);
-	return 0;
+	return EXIT_SUCCESS;
 }
 int replace(Position current) {
 
@@ -178,14 +178,14 @@ int printList(Pos first)
 	return EXIT_SUCCESS;
 }
 
-Pos createEl(int broj)
+Pos createElList(int broj)
 {
 	Pos newel = NULL;
 	newel = (Pos)malloc(sizeof(list));
 
 	if (!newel) {
 		perror("Can't allocate memory!\n");
-		return 0;
+		return EXIT_SUCCESS;
 	}
 
 	newel->number = broj;
@@ -224,5 +224,5 @@ int insertIntoFile(Pos second, Pos first, char* imeDatoteke) {
 		temp2 = temp2->next;
 	}
 	fclose(dat);
-	return 0;
+	return EXIT_SUCCESS;
 }
