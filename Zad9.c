@@ -5,13 +5,13 @@
 #include<time.h>
 #define MAX_SIZE (50)
 
-struct _stablo;
-typedef struct _stablo* Position;
-typedef struct _stablo {
+struct _binTree;
+typedef struct _binTree* Position;
+typedef struct _binTree {
 	int num;
 	Position left;
 	Position right;
-}stablo;
+}binTree;
 
 struct _list;
 typedef struct _list* Pos;
@@ -26,7 +26,7 @@ Position insert(Position current, Position q);
 Position createElement(int number);
 int replace(Position current);
 int printList(Pos first);
-Pos createElList(int broj);
+Pos createElList(int numb);
 int insertAfter(Pos position, Pos newel);
 int insertIntoFile(Pos second, Pos first, char* fileName);
 
@@ -42,7 +42,7 @@ int main()
 	Pos p1 = &Head1;
 	list Head2 = { .number = 0 };
 	Pos p = &Head2;
-	char nazivdat[MAX_SIZE] = "zadatak.txt";
+	char nameoffile[MAX_SIZE] = "task9.txt";
 
 	srand((unsigned)time(&t));
 
@@ -52,20 +52,20 @@ int main()
 		roota = insert(roota, q);
 	}
 
-	printf("\nProvjera ispis stabla inorder: ");
+	printf("\nCheck of inorder print (tree): ");
 	inorder(roota);
-	printf("\nProvjera ispis liste: ");
+	printf("\nList print check: ");
 	inorderList(roota, p1);
 	printList(p1->next);
 
 	OriginalEl = replace(roota);
-	printf("\nProvjera ispis stabla inorder: ");
+	printf("\nCheck of inorder print (tree): ");
 	inorder(roota);
-	printf("\nProvjera ispis liste: ");
+	printf("\nList print check: ");
 	inorderList(roota, p);
 	printList(p->next);
 
-	insertIntoFile(p, p1, nazivdat);
+	insertIntoFile(p, p1, nameoffile);
 
 	for (int i = 0; i < 10; i++)
 	{
@@ -178,7 +178,7 @@ int printList(Pos first)
 	return EXIT_SUCCESS;
 }
 
-Pos createElList(int broj)
+Pos createElList(int numb)
 {
 	Pos newel = NULL;
 	newel = (Pos)malloc(sizeof(list));
@@ -188,7 +188,7 @@ Pos createElList(int broj)
 		return EXIT_SUCCESS;
 	}
 
-	newel->number = broj;
+	newel->number = numb;
 	newel->next = NULL;
 
 	return newel;
@@ -204,11 +204,11 @@ int insertAfter(Pos position, Pos newel)
 
 	return EXIT_SUCCESS;
 }
-int insertIntoFile(Pos second, Pos first, char* imeDatoteke) {
+int insertIntoFile(Pos second, Pos first, char* fileName) {
 	FILE* dat = NULL;
 	Pos temp = first;
 	Pos temp2 = second;
-	dat = fopen(imeDatoteke, "w");
+	dat = fopen(fileName, "w");
 	if (!dat)
 		return -1;
 
