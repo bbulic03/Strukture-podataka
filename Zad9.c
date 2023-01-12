@@ -205,24 +205,24 @@ int insertAfter(Pos position, Pos newel)
 	return EXIT_SUCCESS;
 }
 int insertIntoFile(Pos second, Pos first, char* fileName) {
-	FILE* dat = NULL;
+	FILE* file = NULL;
 	Pos temp = first;
 	Pos temp2 = second;
-	dat = fopen(fileName, "w");
-	if (!dat)
+	file = fopen(fileName, "w");
+	if (!file)
 		return -1;
 
 	while (temp) {
 		if (temp != first)
-			fprintf(dat, "%d ", temp->number);
+			fprintf(file, "%d ", temp->number);
 		temp = temp->next;
 	}
-	fprintf(dat, "\n");
+	fprintf(file, "\n");
 	while (temp2) {
 		if (temp2 != second)
-			fprintf(dat, "%d ", temp2->number);
+			fprintf(file, "%d ", temp2->number);
 		temp2 = temp2->next;
 	}
-	fclose(dat);
+	fclose(file);
 	return EXIT_SUCCESS;
 }
