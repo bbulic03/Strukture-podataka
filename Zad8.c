@@ -13,6 +13,9 @@ struct stablo
 void ispisOrder(poz current);
 void ispisPostorder(poz current);
 void ispisPreorder(poz current);
+int levelOrder(Position current);
+int Height(Position current);
+int currentLevel(Position current, int lvl);
 poz unos(poz current, int x);
 poz brisi(poz current, int x);
 poz traziNajmanji(poz current);
@@ -38,6 +41,8 @@ int main(void)
     ispisPostorder(root);
     printf("\nIspis preorder:\n");
     ispisPreorder(root);
+    printf("\nIspis level order:\n");
+    levelOrder(root);
 
     printf("\nUnesite clanove koje zelite izbrisati(ili 0 za kraj)\n");
     while(1)
@@ -154,4 +159,47 @@ poz trazi(poz current, int x)
     else if(x > current->el)
         return trazi(current->d, x);
     return current;
+}
+
+int levelOrder(Position current) {
+	if (current == NULL) {
+		return 0;
+	}
+
+	int h = Height(current);
+	for (int i = 0; i < h; i++)
+		currentLevel(current, i);
+
+	return 1;
+}
+
+int Height(Position current) {
+
+	if (current == NULL)
+		return 0;
+	else {
+		int LHeight = Height(current->left);
+		int RHeight = Height(current->right);
+
+		if (LHeight > RHeight)
+			return (LHeight + 1);
+		else
+			return (RHeight + 1);
+	}
+}
+
+int currentLevel(Position current, int lvl) {
+
+	if (current == NULL)
+		return 0;
+
+	if (lvl == 1) {
+		printf(" %d ", current->num);
+	}
+	else if (lvl > 1) {
+		currentLevel(current->left, lvl - 1);
+		currentLevel(current->right, lvl - 1);
+	}
+
+	return 1;
 }
